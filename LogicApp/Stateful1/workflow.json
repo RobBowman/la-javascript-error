@@ -1,0 +1,54 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "Call_a_local_rules_function_in_this_logic_app": {
+                "type": "InvokeFunction",
+                "inputs": {
+                    "functionName": "func1",
+                    "parameters": {
+                        "ruleSetName": "SampleRuleSet",
+                        "documentType": "SchemaUser",
+                        "inputXml": "<ns0:Root xmlns:ns0=\"http://BizTalk_Server_Project1.SchemaUser\">\n  <UserDetails>\n    <Age>70</Age>\n    <Name>UserName</Name>\n    <zipCode>98053</zipCode>\n  </UserDetails>\n  <Status>\n    <Gold>false</Gold>\n    <Discount>0</Discount>\n  </Status>\n</ns0:Root>",
+                        "purchaseAmount": 1100,
+                        "zipCode": "98052"
+                    }
+                },
+                "runAfter": {
+                    "Execute_JavaScript_Code": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Response": {
+                "type": "Response",
+                "kind": "http",
+                "inputs": {
+                    "statusCode": 200,
+                    "body": "@body('Call_a_local_rules_function_in_this_logic_app')"
+                },
+                "runAfter": {
+                    "Call_a_local_rules_function_in_this_logic_app": [
+                        "Succeeded"
+                    ]
+                }
+            },
+            "Execute_JavaScript_Code": {
+                "type": "JavaScriptCode",
+                "inputs": {
+                    "code": "const x = 1;\r\n\r\nreturn x;"
+                },
+                "runAfter": {}
+            }
+        },
+        "triggers": {
+            "When_a_HTTP_request_is_received": {
+                "type": "Request",
+                "kind": "Http"
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {}
+    },
+    "kind": "Stateful"
+}
